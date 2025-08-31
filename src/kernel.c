@@ -22,7 +22,6 @@ uint64_t get_kernel_base()
     return rdmsr(MSR_LSTAR) - Xfast_syscall;
 }
 
-
 int init_kernel(uint32_t fwver)
 {
     kernel_base = get_kernel_base();
