@@ -9,4 +9,4 @@ typedef struct __kproc_args
 } kproc_args;
 
 void start(kproc_args* args);
-extern module_start(kproc_args* args);
+extern int module_start(kproc_args* args);

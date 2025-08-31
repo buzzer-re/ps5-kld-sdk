@@ -27,3 +27,4 @@ extern void(*kprintf)(char* fmt, ...);
 
 // Kernel variables
 extern struct flat_pmap* kernel_pmap;
+extern uint64_t* apic_ops;

@@ -11,7 +11,7 @@ CFLAGS	:= $(IDIRS) -Os -std=c11 -ffunction-sections -fdata-sections -fno-builtin
 
 LFLAGS	:= -Xlinker -T ./linker.x -Xlinker -Map="$(MAPFILE)" -O0 -Wl,--build-id=none -Wl,--gc-sections
 CFILES	:= $(wildcard $(SDIR)/*.c)
-SFIL	ES	:= $(wildcard $(SDIR)/*.s)
+SFILES	:= $(wildcard $(SDIR)/*.s)
 OBJS	:= $(patsubst $(SDIR)/%.c, $(ODIR)/%.o, $(CFILES)) $(patsubst $(SDIR)/%.s, $(ODIR)/%.o, $(SFILES)) $(CFILES)
 
 all: $(ODIR) $(OBJS)
