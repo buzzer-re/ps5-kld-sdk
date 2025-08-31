@@ -1,7 +1,7 @@
 OUTPUT_FORMAT("elf64-x86-64", "elf64-x86-64", "elf64-x86-64")
 OUTPUT_ARCH(i386:x86-64)
 
-ENTRY(module_start)
+ENTRY(_start)
 
 PHDRS
 {
@@ -14,7 +14,7 @@ PHDRS
 SECTIONS
 {
         .text : {
-                *(.text.module_start)
+                *(.text._start)
                 *(.text*)
         } : code_seg
         .rodata : {
