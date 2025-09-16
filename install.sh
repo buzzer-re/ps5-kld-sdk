@@ -32,5 +32,4 @@ cp "$BUILD_DIR"/*.o "$LIB_DIR/"
 cp "$LINKER_SCRIPT" "$LD_DIR/"
 cp -r "$SAMPLE_PROJECT" "$TEMPLATE_PROJ"
 
-echo "Done, add the following on your ~/.profile"
-echo "export PS5_KLD_SDK=/opt/ps5-kld-sdk"
+echo "Done"

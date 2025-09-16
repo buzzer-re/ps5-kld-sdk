@@ -1,1 +1,82 @@
-# PlayStation 5 Kernel Module SDK 
+# PlayStation 5 Kernel SDK 
+
+
+This an Kernel SDK is designed to support research on PlayStation 5 kernels when using loaders such as [kldload](https://github.com/buzzer-re/PS5_kldload). 
+
+This SDK eliminates the need to rewrite the same kernel initialization code each time I started a new project or simple test. It also encapsulates useful functions and includes its own CRT for more complex initializations when needed.
+It currently includes offsets for functions and kernel variables for the following firmware versions:
+
+- 4.03
+- 5.0
+
+More firmware versions can be added. The ps5-kldload supports firmware up to version 6.50 in its [dev](https://github.com/buzzer-re/PS5_kldload/tree/dev) branch.
+
+
+## Installing
+
+First, install the dependencies (assuming Ubuntu).
+
+```
+$ sudo apt install build-essential git # gcc, make and etc
+```
+
+Clone the repository and install it
+
+```
+$ git clone git@github.com:buzzer-re/ps5-kld-sdk.git
+$ cd ps5-kld-sdk
+$ ./install.sh
+```
+
+The installation builds the files and moves them to `/opt/ps5-kld-sdk`.
+
+## Example
+
+Here's an example using the SDK
+
+```c
+#include <ps5kld/kernel.h>
+#include <ps5kld/intrin.h>
+#include <ps5kld/dmap.h>
+#include <ps5kld/machine/idt.h>
+
+int module_start(kproc_args* args)
+{
+    kprintf("Hello from kernel SDK, running on fw: %x\n", args->fwver);
+    kprintf("Kernel base: %#02lx\n", args->kdata_base);
+
+    uint8_t idt[10];
+    __sidt(idt);
+
+    IDTR* idtr = (IDTR*) idt;
+
+    kprintf("CR3: %x\nCR0: %x\nIDT base: %#02lx\n",
+        __readcr3(),
+        __readcr0(),
+        idtr->base
+    );
+
+
+    return 0;
+}
+```
+
+## Using
+
+Check the `sample` folder. To create a new project, you can copy the sample from the SDK installation directory to a new location.
+
+```
+$ mkdir myproj
+$ cp /opt/ps5-kld-sdk/sample/hello_world/* myproj/
+```
+
+The payloads are built with the `.bin` extension. You can send them to any kernel module loader, such as `kldload`, or embed them in your own loader.
+
+Since the SDK includes freebsd-headers, you can use FreeBSD definitions in your project when needed, such as `<sys/cpuset.h>`. Depending on your IDE, you may want to add the following path for code completion:
+
+- /opt/ps5-kld-sdk/include
+- /oot/ps5-kld-sdk/include/freebsd-headers
+
+## Porting
+
+To add new offsets and function definitions, check the `include/ps5kld/offsets` directory and update the entries in `src/kernel.c`, specifically within the init_kernel function.
