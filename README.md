@@ -68,6 +68,10 @@ int module_start(kproc_args* args)
 You can easily play around with the physical memory with already created wrappers:
 
 ```c
+#include <ps5kld/kernel.h>
+#include <ps5kld/dmap.h>
+#include <ps5kld/intrin.h>
+
 int module_start(void* kproc_args)
 {
     uint64_t x = 10;
@@ -82,7 +86,8 @@ int module_start(void* kproc_args)
 
     kprintf("new value: %d\n", x);
 
-    retur
+    return 0;
+}
 ```
 
 ## Using
