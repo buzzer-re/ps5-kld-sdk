@@ -25,8 +25,8 @@ if [ ! -d "$INSTALL_DIR" ]; then
 fi
 
 echo "Copying headers..."
-cp -r "$FREEBSD_HEADERS_DIR" "$INCLUDE_DIR/"
-cp -r "$PS5KLD_INCLUDE_DIR" "$INCLUDE_DIR/"
+#cp -r "$FREEBSD_HEADERS_DIR" "$INCLUDE_DIR/"
+#cp -r "$PS5KLD_INCLUDE_DIR" "$INCLUDE_DIR/"
 echo "Copying objects..."
 cp "$BUILD_DIR"/*.o "$LIB_DIR/"
 cp "$LINKER_SCRIPT" "$LD_DIR/"
