@@ -11,3 +11,6 @@
 #define cpu_apic_ids_offset_500 OFFSET(0xFFFFFFFF83D338C0)
 
 #define kernel_pmap_offset_500 OFFSET(0xFFFFFFFF841E8A88)
+#define malloc_offset_500 OFFSET(0xFFFFFFFF80D9B210)
+#define malloc_MTEMP_offset_500 OFFSET(0xFFFFFFFF822855A0)
+

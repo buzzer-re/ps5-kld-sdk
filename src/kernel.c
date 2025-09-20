@@ -1,12 +1,16 @@
 #include <ps5kld/kernel.h>
 #include <ps5kld/offsets/offsets.h>
 
+// Kernel functions
 void (*kprintf)(char* fmt, ...) = NULL;
+uint64_t (*kmalloc)(size_t size, uint64_t *type, int flags) = NULL;
 
+// Kernel variables
 struct flat_pmap* kernel_pmap = NULL;
 uint64_t kernel_base;
 uint64_t Xfast_syscall = 0;
 uint64_t* apic_ops = 0;
+uint64_t* KM_TEMP = 0;
 
 #define SET_KERNEL_SYMBOLS(fw) do { \
     Xfast_syscall = Xfast_syscall_##fw; \
@@ -14,6 +18,8 @@ uint64_t* apic_ops = 0;
     kprintf       = (void (*)(char *, ...))(kernel_base + kprintf_offset_##fw); \
     apic_ops      = (void *)(kernel_base + apic_ops_offset_##fw); \
     kernel_pmap   = (void *)(kernel_base + kernel_pmap_offset_##fw); \
+    kmalloc       = (void *)(kernel_base + malloc_offset_##fw); \
+    KM_TEMP       = (void *)(kernel_base + malloc_MTEMP_offset_##fw); \
 } while (0)
 
 

@@ -8,3 +8,7 @@
 #define kprintf_offset_403 0x28da78
 #define apic_ops_offset_403 OFFSET(0xFFFFFFFF81B44AC8)
 #define kernel_pmap_offset_403 OFFSET(0xFFFFFFFF84067A78)
+#define malloc_offset_403 OFFSET(0xFFFFFFFF80D66500)
+#define malloc_MTEMP_offset_403 OFFSET(0xFFFFFFFF82156080)
+
+

@@ -7,6 +7,11 @@
 #include <machine/specialreg.h>
 #include <stdint.h>
 
+#define M_ZERO 0
+#define M_NODUMP 1
+#define M_NOWAIT 2
+#define M_WAITOK 3
+#define M_USE_RESERVE 4
 
 struct flat_pmap {                                                                                                   
     uint64_t mtx_name_ptr;
@@ -24,8 +29,9 @@ int init_kernel(uint32_t fwver);
 
 // Kernel functions
 extern void(*kprintf)(char* fmt, ...);
-
+extern uint64_t(*kmalloc)(size_t size, uint64_t *type, int flags);
 
 // Kernel variables
 extern struct flat_pmap* kernel_pmap;
 extern uint64_t* apic_ops;
+extern uint64_t* KM_TEMP; // malloc_type
