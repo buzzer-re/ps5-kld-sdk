@@ -3,7 +3,8 @@
 
 This an Kernel SDK is designed to support research on PlayStation 5 kernels when using loaders such as [kldload](https://github.com/buzzer-re/PS5_kldload). 
 
-This SDK eliminates the need to rewrite the same kernel initialization code each time I started a new project or simple test. It also encapsulates useful functions and includes its own CRT for more complex initializations when needed.
+I've wrote this SDK to eliminate the need to rewrite the same kernel initialization code each time I started a new project or simple tests. It also encapsulates useful functions and includes its own CRT for more complex initializations when needed.
+
 It currently includes offsets for functions and kernel variables for the following firmware versions:
 
 - 4.03
@@ -32,7 +33,8 @@ The installation builds the files and moves them to `/opt/ps5-kld-sdk`.
 
 ## Example
 
-Here's an example using the SDK
+#### CR and IDT manipulation
+Here's an example using the SDK to read some registers values
 
 ```c
 #include <ps5kld/kernel.h>
@@ -59,6 +61,28 @@ int module_start(kproc_args* args)
 
     return 0;
 }
+```
+
+#### Physical memory playground
+
+You can easily play around with the physical memory with already created wrappers:
+
+```c
+int module_start(void* kproc_args)
+{
+    uint64_t x = 10;
+    kprintf("vaddr: %#02lx\nvalue: %d\n", &x, x);
+
+    uint64_t phys =  virt2phys(__readcr3(), &x); // or any other pml4 entry value (like usermode processes)
+    kprintf("paddr: %#02lx\n", phys);
+    
+    // write using the dmap mem space
+    uint64_t* paddr_dmap =  PHYSTODMAP(phys);
+    *paddr_dmap = 30;
+
+    kprintf("new value: %d\n", x);
+
+    retur
 ```
 
 ## Using
