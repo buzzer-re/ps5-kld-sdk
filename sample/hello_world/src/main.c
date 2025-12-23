@@ -9,7 +9,7 @@ int module_start(kproc_args* args)
     kprintf("Kernel base: %#02lx\n", args->kdata_base);
 
     uint8_t idt[10];
-    __sidt(idt);
+    __sidt((uint64_t*)idt);
 
     IDTR* idtr = (IDTR*) idt;
 
