@@ -10,7 +10,7 @@ It currently includes offsets for functions and kernel variables for the followi
 - 4.03
 - 5.0
 
-More firmware versions can be added. The ps5-kldload supports firmware up to version 6.50 in its [dev](https://github.com/buzzer-re/PS5_kldload/tree/dev) branch.
+More firmware versions can be added. The [ps5-kldload](https://github.com/buzzer-re/PS5_kldload/tree/dev) supports firmware up to version 6.50.
 
 
 ## Installing
