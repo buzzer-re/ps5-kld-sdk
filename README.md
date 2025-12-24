@@ -24,7 +24,7 @@ $ sudo apt install build-essential git # gcc, make and etc
 Clone the repository and install it
 
 ```
-$ git clone git@github.com:buzzer-re/ps5-kld-sdk.git
+$ git clone https://github.com/buzzer-re/ps5-kld-sdk.git
 $ cd ps5-kld-sdk
 $ ./install.sh
 ```
