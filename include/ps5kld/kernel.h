@@ -22,12 +22,6 @@ struct flat_pmap {
     uint64_t pm_cr3;
 }; 
 
-typedef struct __kproc_args
-{
-    uint64_t kdata_base;
-    uint32_t fwver;
-} kproc_args;
-
 uint64_t get_kernel_base();
 int init_kernel(uint32_t fwver);
 
