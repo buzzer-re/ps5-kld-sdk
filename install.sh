@@ -12,6 +12,7 @@ LINKER_SCRIPT="linker.x"
 SAMPLE_PROJECT=sample/hello_world
 
 echo "Starting PS5 KLD SDK installation..."
+make clean
 make
 
 # Create main install directory if it doesn't exist
