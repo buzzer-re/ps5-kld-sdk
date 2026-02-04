@@ -21,12 +21,19 @@ SECTIONS
                 *(.rodata)
                 *(.rodata*)
         } : rdata_seg
-        .data : { *(.data) } : data_seg
-        .bss  : { *(.bss) } : bss_seg
+        .data : { *(.data*) } : data_seg
+        .bss  : { *(.bss*)  *(.bss.*) } : bss_seg
         /DISCARD/ : {
                 *(.comment)
                 *(.note.GNU-stack)
+                *(.note.gnu.property)
                 *(.eh_frame)
                 *(.interp)
+                *(.dynsym)
+                *(.dynstr)
+                *(.gnu.hash)
+                *(.dynamic)
+                *(.got)
+                *(.got.plt)
         }
 }
