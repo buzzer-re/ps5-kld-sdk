@@ -1,21 +1,36 @@
+# Detect OS and set LLVM paths accordingly
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Darwin)
+    # macOS with Homebrew LLVM 18
+    LLVM_PREFIX := /opt/homebrew/opt/llvm@18/bin
+else
+    # Linux with LLVM 18 from apt repository
+    LLVM_PREFIX := /usr/lib/llvm-18/bin
+endif
 
-CC		:= gcc
-OBJCOPY	:= objcopy
-ODIR	:= build
-SDIR	:= src
+CC      := $(LLVM_PREFIX)/clang
+OBJCOPY := $(LLVM_PREFIX)/llvm-objcopy
+ODIR    := build
+SDIR    := src
 
 MAPFILE := $(shell basename "$(CURDIR)").map
-CFLAGS += -DFIRMWARE=$(FW)
-$(info $(CLFLAGS))
-CFLAGS	:= $(IDIRS) -Os -std=c11 -ffunction-sections -fdata-sections -fno-builtin -nostartfiles -nostdlib -Wall -Wextra -march=btver2 -mtune=btver2 -m64 -mabi=sysv -mcmodel=small -fpie -fPIC -I ./freebsd-headers/ -I ./include/
+CFLAGS  := --target=x86_64-unknown-none-elf \
+           -I./freebsd-headers/ \
+           -I./include/ \
+           $(IDIRS) \
+           -Os -std=c11 \
+           -ffunction-sections -fdata-sections \
+           -fno-builtin -nostdlib -ffreestanding \
+           -Wall -Wextra \
+           -march=btver2 -mtune=btver2 \
+           -m64 -mcmodel=small \
+           -fPIC
 
-LFLAGS	:= -Xlinker -T ./linker.x -Xlinker -Map="$(MAPFILE)" -O0 -Wl,--build-id=none -Wl,--gc-sections
-CFILES	:= $(wildcard $(SDIR)/*.c)
-SFILES	:= $(wildcard $(SDIR)/*.s)
-OBJS	:= $(patsubst $(SDIR)/%.c, $(ODIR)/%.o, $(CFILES)) $(patsubst $(SDIR)/%.s, $(ODIR)/%.o, $(SFILES)) $(CFILES)
+CFILES  := $(wildcard $(SDIR)/*.c)
+SFILES  := $(wildcard $(SDIR)/*.s)
+OBJS    := $(patsubst $(SDIR)/%.c, $(ODIR)/%.o, $(CFILES)) $(patsubst $(SDIR)/%.s, $(ODIR)/%.o, $(SFILES))
 
 all: $(ODIR) $(OBJS)
-	
 
 $(ODIR)/%.o: $(SDIR)/%.c
 	$(CC) -c -o $@ $< $(CFLAGS)

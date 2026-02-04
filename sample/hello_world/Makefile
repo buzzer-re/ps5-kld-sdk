@@ -1,23 +1,47 @@
-CC      := gcc
-OBJCOPY := objcopy
+# Detect OS and set LLVM paths accordingly
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Darwin)
+    # macOS with Homebrew LLVM 18
+    LLVM_PREFIX := /opt/homebrew/opt/llvm@18/bin
+else
+    # Linux with LLVM 18 from apt repository
+    LLVM_PREFIX := /usr/lib/llvm-18/bin
+endif
+
+CC      := $(LLVM_PREFIX)/clang
+LD      := $(LLVM_PREFIX)/ld.lld
+OBJCOPY := $(LLVM_PREFIX)/llvm-objcopy
 ODIR    := build
 SDIR    := src
 
 MAPFILE := $(shell basename "$(CURDIR)").map
-CFLAGS += -DFIRMWARE=$(FW)
-$(info $(CLFLAGS))
-CFLAGS  := $(IDIRS) -I/opt/ps5-kld-sdk/include/ -I/opt/ps5-kld-sdk/include/freebsd-headers/ -Os -std=c11 -ffunction-sections -fdata-sections -fno-builtin -nostartfiles -nostdlib -Wall -Wextra -march=btver2 -mtune=btver2 -m64 -mabi=sysv -mcmodel=small -fpie -fPIC -I ./include/
+CFLAGS  := --target=x86_64-unknown-none-elf \
+           -I/opt/ps5-kld-sdk/include/ \
+           -I/opt/ps5-kld-sdk/include/freebsd-headers/ \
+           -I./include/ \
+           $(IDIRS) \
+           -Os -std=c11 \
+           -ffunction-sections -fdata-sections \
+           -fno-builtin -nostdlib -ffreestanding \
+           -Wall -Wextra \
+           -march=btver2 -mtune=btver2 \
+           -m64 -mcmodel=small \
+           -fPIC
 
-LFLAGS  :=  -Xlinker -T /opt/ps5-kld-sdk/ld/linker.x -Xlinker -Map="$(MAPFILE)" -O0 -Wl,--build-id=none -Wl,--gc-sections
+LFLAGS  := -T /opt/ps5-kld-sdk/ld/linker.x \
+           -Map=$(MAPFILE) \
+           --gc-sections \
+           --build-id=none
+
 CFILES  := $(wildcard $(SDIR)/*.c)
 SFILES  := $(wildcard $(SDIR)/*.s)
-OBJS    := $(patsubst $(SDIR)/%.c, $(ODIR)/%.o, $(CFILES)) $(patsubst $(SDIR)/%.s, $(ODIR)/%.o, $(SFILES)) $(CFILES)
-LIBS	:= /opt/ps5-kld-sdk/lib/*.o
-TARGET = $(shell basename "$(CURDIR)").bin
-ELF    = $(shell basename "$(CURDIR)").elf
+OBJS    := $(patsubst $(SDIR)/%.c, $(ODIR)/%.o, $(CFILES)) $(patsubst $(SDIR)/%.s, $(ODIR)/%.o, $(SFILES))
+LIBS    := /opt/ps5-kld-sdk/lib/*.o
+TARGET  := $(shell basename "$(CURDIR)").bin
+ELF     := $(shell basename "$(CURDIR)").elf
 
 $(TARGET): $(ODIR) $(OBJS)
-	$(CC) $(ODIR)/*.o -o $(ELF) $(CFLAGS) $(LFLAGS) $(LIBS)
+	$(LD) $(ODIR)/*.o $(LIBS) -o $(ELF) $(LFLAGS)
 	$(OBJCOPY) -S -O binary $(ELF) "$(TARGET)"
 	mv $(ELF) build/
 
