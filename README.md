@@ -15,18 +15,34 @@ More firmware versions can be added. The [ps5-kldload](https://github.com/buzzer
 
 ## Installing
 
-First, install the dependencies (assuming Ubuntu).
+### Dependencies
 
-```
-$ sudo apt install build-essential git # gcc, make and etc
+#### macOS (Homebrew)
+
+```bash
+# Install Homebrew if not already installed
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# Install LLVM 18 and socat
+brew install llvm@18 socat
 ```
 
-Clone the repository and install it
+#### Linux (Ubuntu/Debian)
 
+```bash
+# Install build tools
+sudo apt update
+sudo apt install -y build-essential git clang-18 lld-18 llvm-18
 ```
-$ git clone https://github.com/buzzer-re/ps5-kld-sdk.git
-$ cd ps5-kld-sdk
-$ ./install.sh
+
+### Building and Installing
+
+Clone the repository and install it:
+
+```bash
+git clone https://github.com/buzzer-re/ps5-kld-sdk.git
+cd ps5-kld-sdk
+sudo ./install.sh
 ```
 
 The installation builds the files and moves them to `/opt/ps5-kld-sdk`.

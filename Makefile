@@ -1,4 +1,13 @@
-LLVM_PREFIX := /opt/homebrew/opt/llvm@18/bin
+# Detect OS and set LLVM paths accordingly
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Darwin)
+    # macOS with Homebrew LLVM 18
+    LLVM_PREFIX := /opt/homebrew/opt/llvm@18/bin
+else
+    # Linux with LLVM 18 from apt repository
+    LLVM_PREFIX := /usr/lib/llvm-18/bin
+endif
+
 CC      := $(LLVM_PREFIX)/clang
 OBJCOPY := $(LLVM_PREFIX)/llvm-objcopy
 ODIR    := build
