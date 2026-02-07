@@ -19,11 +19,9 @@ CFLAGS  := --target=x86_64-unknown-none-elf \
            -I./include/ \
            $(IDIRS) \
            -Os -std=c11 \
-           -ffunction-sections -fdata-sections \
-           -fno-builtin -nostdlib -ffreestanding \
+           -nostdlib\
            -Wall -Wextra \
-           -march=btver2 -mtune=btver2 \
-           -m64 -mcmodel=small \
+           -m64 \
            -fPIC
 
 CFILES  := $(wildcard $(SDIR)/*.c)

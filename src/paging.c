@@ -153,7 +153,7 @@ uint64_t* get_pte_for_remap(uint64_t cr3, uint64_t addr)
 }
 
 // TODO: Fix it
-int remap_page(uint64_t cr3, uint64_t vaddr_src, uint64_t vaddr_dst)
+uint64_t remap_page(uint64_t cr3, uint64_t vaddr_src, uint64_t vaddr_dst)
 {
     if (!cr3 || !vaddr_src || !vaddr_dst)
     {
@@ -167,6 +167,5 @@ int remap_page(uint64_t cr3, uint64_t vaddr_src, uint64_t vaddr_dst)
     uint64_t orig_pa = PDE_ADDR(*pt2);
     SET_PDE_ADDR(*pt2, virt2phys(cr3, vaddr_dst));
     
-    // *pt2 = *pte1; 
-
+    return orig_pa;
 }

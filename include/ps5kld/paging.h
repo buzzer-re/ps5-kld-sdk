@@ -74,7 +74,7 @@ typedef struct __vaddr_page
 
 int bind_page_pte(uint64_t vaddr1, uint64_t vaddr2, uint64_t pml);
 uint64_t virt2phys(uint64_t cr3, uint64_t vaddr);
-int remap_page(uint64_t cr3, uint64_t vaddr_src, uint64_t vaddr_dst);
+uint64_t remap_page(uint64_t cr3, uint64_t vaddr_src, uint64_t vaddr_dst);
 
 // page tables 
 uint64_t get_plm4e(uint64_t cr3, uint64_t vaddr);
