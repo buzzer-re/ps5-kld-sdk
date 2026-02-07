@@ -2,6 +2,7 @@
 *.elf
 *.o
 build/*
+devdocs/
 .vscode/
 *.map
 *.bin
